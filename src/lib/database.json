@@ -1,0 +1,13 @@
+{
+    "games": [
+        {
+            "title": "Undertale",
+            "cover": "https://static-cdn.jtvnw.net/ttv-boxart/490713_IGDB-288x384.jpg",
+            "genres": ["rpg", "2d", "indie"],
+            "plataforms": ["PC", "Nintendo Switch", "Playstation 4", "Xbox One", "PlayStation Vita", "Xbox series X"],
+            "languages": ["English", "Japanese"],
+            "rating": 92,
+            "releaseDate": "2015"
+        }
+    ]
+}
