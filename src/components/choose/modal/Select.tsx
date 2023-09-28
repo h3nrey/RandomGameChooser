@@ -21,13 +21,13 @@ export default function Select({ changeCallback, name, children }: PlataformSele
     }
     return (
         <div className="flex flex-col">
-            <label htmlFor="">
+            <label htmlFor="" className="text-[1.25rem]">
                 Plataforms
             </label>
             <select
                 defaultValue=""
                 onChange={handleSelect}
-                className="text-black"
+                className="text-bege px-2 py-2 bg-white rounded-md focus:outline-none focus:bg-gray focus:text-white"
                 name="plataforms"
 
             >

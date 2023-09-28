@@ -34,12 +34,12 @@ export default function AddGameModal({ closeCallback, addGame }: Props) {
     }
 
     return (
-        <div className="bg-zinc-700 text-white py-6 px-10">
-            <header>Add a game to your list</header>
+        <div className="bg-red-500 top-1/2 -translate-y-1/2 left-1/2 fixed flex-col -translate-x-1/2 text-white py-6 px-10 z-20">
+            <header className="font-title text-[2rem] text-center mb-2">Add a game to your list</header>
             <form
                 onSubmit={handleFormSubmission}
                 action="/"
-                className="flex flex-col gap-4"
+                className="flex flex-col gap-4 rounded-lg"
             >
                 <Input
                     label="Title"
@@ -49,7 +49,7 @@ export default function AddGameModal({ closeCallback, addGame }: Props) {
                 />
                 <Input
                     label="Cover"
-                    placeholder="Ex: https:someurl.(jpg/png)"
+                    placeholder="Ex: https://someurl.(jpg/png)"
                     name="cover"
                     changeCallback={handleInputChange}
                 />
@@ -91,14 +91,15 @@ export default function AddGameModal({ closeCallback, addGame }: Props) {
                     />
                 </div>
 
-                <div className="flex gap-10">
+                <div className="flex gap-10 mt-4">
                     <button
                         type="submit"
-                        className="bg-black/50 px-5 py-2 rounded-sm"
+                        className="bg-gray px-7 outline outline-white outline-0 hover:outline-4 transition-all py-2 rounded-sm"
                     >
                         Add
                     </button>
                     <button
+                        className="outline outline-white outline-2 px-5 rounded-sm hover:outline-4 transition-all"
                         onClick={() => closeCallback(false)}
                     >
                         Cancel

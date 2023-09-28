@@ -1,11 +1,14 @@
 "use client"
 
 import AddGameModal from "@/components/choose/AddGameModal"
+import ChooseHeader from "@/components/choose/ChooseHeader"
 import ChoosedGame from "@/components/choose/ChoosedGame/ChoosedGame"
 import Loader from "@/components/choose/ChoosedGame/Loader"
+import { GamesCollectionContext } from "@/components/choose/GamesCollectionContext"
 import UserGameList from "@/components/choose/UserGameList"
 import { Game } from "@/lib/types"
 import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 
 export default function Page() {
     const [games, setGames] = useState<Game[]>([])
@@ -36,6 +39,12 @@ export default function Page() {
         setGames(gamesTemp)
     }
 
+    function removeGame(gameIndex: number) {
+        const gamesTemp = games.filter((_, index) => index != gameIndex)
+        window.localStorage.setItem("games", JSON.stringify(gamesTemp))
+        setGames(gamesTemp)
+    }
+
     useEffect(() => {
         const storedData = window.localStorage.getItem("games")
         if (storedData) {
@@ -46,28 +55,27 @@ export default function Page() {
 
     return (
         <div className="flex flex-col w-full">
-            <div className="mb-10">
-                <div className="font-title text-[1.5rem] mb-4 text-white">Your games</div>
+            <GamesCollectionContext.Provider value={games}>
+                <ChooseHeader removeGame={removeGame} openModal={handleModalState} />
+            </GamesCollectionContext.Provider>
 
-                <div className="flex gap-6">
-                    <button
-                        className="px-8 text-[1.5rem] flex flex-col items-center justify-center transition-all text-white hover:outline hover:outline-4 hover:outline-white bg-gray"
-                        onClick={() => handleModalState(true)}
-                    >
-                        ADD
-                        <span>+</span>
-                    </button>
-                    {games && (
-                        <UserGameList games={games} />
-                    )}
-                </div>
-            </div>
-
-            {modalIsOpen && (
+            {/* {modalIsOpen && (
                 <AddGameModal
                     closeCallback={handleModalState}
                     addGame={addGame}
                 />
+            )} */}
+
+            {createPortal(
+                <>
+                    {modalIsOpen && (
+                        <AddGameModal
+                            closeCallback={handleModalState}
+                            addGame={addGame}
+                        />
+                    )}
+                </>,
+                document.body
             )}
 
             <div className="flex flex-col items-center">
@@ -83,7 +91,7 @@ export default function Page() {
 
                 <button
                     onClick={chooseRandomGame}
-                    className="bg-red-500 text-white text[1.5rem] py-4 px-4 rounded-sm w-fit outline outline-white outline-0 transition-all hover:outline-4 "
+                    className="bg-red-500 text-white text[1.75rem] py-4 px-4 rounded-sm w-fit outline outline-white outline-0 transition-all hover:outline-4 "
                 >
                     Choose
                 </button>

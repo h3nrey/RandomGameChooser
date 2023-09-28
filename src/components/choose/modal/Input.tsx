@@ -17,12 +17,12 @@ export default function Input({ label, placeholder, name, changeCallback }: Inpu
     }
 
     return (
-        <div className="flex flex-col">
-            <label htmlFor="">
+        <div className="flex flex-col gap-1">
+            <label htmlFor="" className="text-[1.25rem]">
                 {label}
             </label>
             <input
-                className="text-black"
+                className="text-gray bg-white placeholder:text-bege px-2 rounded-md py-2 transition-all outline-0 outline outline-white focus:outline-4 focus:bg-gray focus:text-white"
                 type="text"
                 name={name}
                 onChange={handleInput}

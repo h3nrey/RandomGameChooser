@@ -38,13 +38,13 @@ export default function GenresField({ changeCallback }: GenresFieldProps) {
         <div className="flex gap-2 items-end">
 
             <div className="flex flex-col">
-                <label htmlFor="">
+                <label htmlFor="" className="text-[1.25rem]">
                     Genres
                 </label>
                 <input
                     value={inputText}
                     onChange={handleInputText}
-                    className="pl-1 text-black"
+                    className="text-gray bg-white placeholder:text-bege px-2 rounded-md py-2 transition-all outline-0 outline outline-white focus:outline-4 focus:bg-gray focus:text-white w-96"
                     type="text"
                     name="genres"
                     placeholder="type ',' to add multiple genres"

@@ -8,9 +8,9 @@ export default function GameListCard({ cover, close }: GameListCardProps) {
         close()
     }
     return (
-        <div className="group relative z-0">
+        <div className="group relative z-0 h-full">
             <img
-                className="h-32"
+                className="h-full"
                 src={cover}
                 alt=""
             />

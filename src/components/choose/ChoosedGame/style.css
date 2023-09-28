@@ -5,7 +5,7 @@
 
 .choosed__title{
     z-index: 0;
-    animation: showTitle 2s;
+    animation: showTitle 1s;
 }
 
 .loader{
