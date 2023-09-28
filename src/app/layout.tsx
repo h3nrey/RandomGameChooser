@@ -1,9 +1,19 @@
 import Header from '@/components/Header'
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Palette_Mosaic } from 'next/font/google'
+import localFont from "next/font/local"
 
+const nico = localFont({
+  src: "../../public/nicoMoji.ttf",
+  variable: "--font-text",
+})
 const inter = Inter({ subsets: ['latin'] })
+const palette = Palette_Mosaic({
+  subsets: ["latin"],
+  variable: "--font-title",
+  weight: '400'
+})
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,8 +27,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className='px-40'>
+      <body className={`${palette.variable} ${nico.variable} font-sans`}>
+        <div className='px-40 pt-20 flex flex-col items-center bg-black gap-10 min-h-screen'>
           <Header />
           {children}
 

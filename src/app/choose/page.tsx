@@ -1,18 +1,18 @@
 "use client"
 
 import AddGameModal from "@/components/choose/AddGameModal"
+import ChoosedGame from "@/components/choose/ChoosedGame/ChoosedGame"
+import Loader from "@/components/choose/ChoosedGame/Loader"
 import UserGameList from "@/components/choose/UserGameList"
-import gamesData from "@/lib/database.json"
 import { Game } from "@/lib/types"
-import { ReactElement, useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function Page() {
     const [games, setGames] = useState<Game[]>([])
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
-
-    const carousel = useRef<HTMLDivElement>(null)
-    const [carrouselPos, setCarrouselPos] = useState(0)
+    const [choosedGameIndex, setChoosedGameIndex] = useState<Game | null>(null)
+    const [choosing, setChoosing] = useState(false);
 
     function handleModalState(state: boolean) {
         if (modalIsOpen && !state) {
@@ -22,35 +22,18 @@ export default function Page() {
         }
     }
 
+    function chooseRandomGame() {
+        setChoosing(true);
+        const randomIndex = Math.floor(Math.random() * games.length)
+        const game = games[randomIndex]
+        setChoosedGameIndex(game)
+        setTimeout(() => setChoosing(false), 1500)
+    }
+
     function addGame(game: Game) {
         const gamesTemp = [...games, game]
         window.localStorage.setItem("games", JSON.stringify(gamesTemp))
         setGames(gamesTemp)
-    }
-
-    function moveCarousel() {
-        const element = carousel.current
-        if (element == null) return
-
-
-        let amount = 208
-        let targetPos = 0;
-
-        const routine = setInterval(() => {
-            // console.log("moved")
-            // const curPos = element.getBoundingClientRect().left;
-            const curPos = element.offsetLeft;
-            const elSize = element.offsetWidth;
-            targetPos = curPos - amount
-            console.log("curPos" + curPos)
-            console.log(targetPos)
-            console.log(elSize)
-            setCarrouselPos(targetPos % -(elSize))
-        }, 200)
-
-        window.setTimeout(() => {
-            clearInterval(routine)
-        }, 1200)
     }
 
     useEffect(() => {
@@ -62,17 +45,23 @@ export default function Page() {
     }, [])
 
     return (
-        <div className="flex flex-col">
-            Your games
+        <div className="flex flex-col w-full">
+            <div className="mb-10">
+                <div className="font-title text-[1.5rem] mb-4 text-white">Your games</div>
 
-            {games && (
-                <UserGameList games={games} />
-            )}
-            <button
-                onClick={() => handleModalState(true)}
-            >
-                add a game
-            </button>
+                <div className="flex gap-6">
+                    <button
+                        className="px-8 text-[1.5rem] flex flex-col items-center justify-center transition-all text-white hover:outline hover:outline-4 hover:outline-white bg-gray"
+                        onClick={() => handleModalState(true)}
+                    >
+                        ADD
+                        <span>+</span>
+                    </button>
+                    {games && (
+                        <UserGameList games={games} />
+                    )}
+                </div>
+            </div>
 
             {modalIsOpen && (
                 <AddGameModal
@@ -81,36 +70,25 @@ export default function Page() {
                 />
             )}
 
-            <div
-                className="w-52 h-64 outline-4 outline outline-red-600 z-10 relative overflow-hidden"
-            >
-                <div
-                    className="whitespace-nowrap absolute z-[-1] transition-all"
-                    style={{ left: `${carrouselPos}px` }}
-                    // style={{ transform: `translateX(${carrouselPos}px)` }}
-                    ref={carousel}
+            <div className="flex flex-col items-center">
+                {choosedGameIndex && (
+                    <div className="mb-8">
+                        {choosing ? (
+                            <Loader />
+                        ) : (
+                            <ChoosedGame choosedGame={choosedGameIndex} />
+                        )}
+                    </div>
+                )}
+
+                <button
+                    onClick={chooseRandomGame}
+                    className="bg-red-500 text-white text[1.5rem] py-4 px-4 rounded-sm w-fit outline outline-white outline-0 transition-all hover:outline-4 "
                 >
-                    {games && games.map(game => (
-                        <div key={game.title} className="w-52 inline-block transition">
-                            <img
-                                src={game.cover}
-                                alt=""
-                                className="h-60 w-full"
-                            />
-                            <h2>{game.title}</h2>
-                        </div>
-                    ))}
-                </div>
-
-
+                    Choose
+                </button>
             </div>
 
-            <button
-                onClick={moveCarousel}
-                className="bg-black text-white text-3xl px-2 rounded-sm w-fit"
-            >
-                Choose
-            </button>
         </div>
     )
 }

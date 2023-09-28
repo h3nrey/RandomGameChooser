@@ -1,11 +1,15 @@
+import Link from "next/link";
+
 export default function Header() {
     return (
         <header>
-            <h1
-                className="text-emerald-500 text-lg"
-            >
-                Random game picker
-            </h1>
+            <Link href="/">
+                <h1
+                    className="text-red-500 font-title text-[2rem]"
+                >
+                    RANDOM GAME CHOOSER
+                </h1>
+            </Link>
         </header>
     )
 }

@@ -1,0 +1,93 @@
+.cover{
+    z-index: 10;
+    animation: show 700ms;
+}
+
+.choosed__title{
+    z-index: 0;
+    animation: showTitle 2s;
+}
+
+.loader{
+    animation: poping 1s infinite;
+}
+
+.dots{
+    animation: pulse 1s infinite
+}
+
+.dots:nth-child(1) {
+    animation-delay: 400ms;
+}
+.dots:nth-child(2) {
+    animation-delay: 600ms;
+}
+.dots:nth-child(3) {
+    animation-delay: 800ms;
+}
+
+@keyframes pulse{
+    0%{
+        opacity: 0;
+        transform: translateY(0);
+    }
+    9%{
+        opacity: 0;
+    }
+    10%{
+        opacity: 100%;
+        transform: translateY(20%);
+    }
+    
+    100%{
+        opacity: 100%;
+        transform: translateY(0%);
+    }
+}
+
+@keyframes poping{
+    0% {
+        transform: translateY(0%) rotate(0);
+    }
+
+    25% {
+        transform: translateY(-25%) rotate(8deg);
+    }
+    50% {
+        transform: translateY(-50%) rotate(0deg);
+    }
+    75% {
+        transform: translateY(-25%) rotate(-8deg);
+    }
+    100% {
+        transform: translateY(0%) rotate(0);
+    }
+}
+
+@keyframes show{
+    from {
+        transform: scale(0.5) translateY(-50%);
+    }
+    to {
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes showTitle{
+    0%{
+        transform: translateY(-400%) scale(0);
+    }
+
+    25%{
+        transform: translateY(-400%) scale(0%);
+    }
+
+    30%{
+        transform: translateY(-300%) scale(100%);
+    }
+
+    100%{
+        transform: translateY(0);
+    }
+
+}

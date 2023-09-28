@@ -1,8 +1,8 @@
 "use client"
 
 import { ChangeEvent, FormEvent, useState } from "react";
-import GenresField from "./GenresField";
-import Select from "./Select";
+import GenresField from "./modal/GenresField";
+import Select from "./modal/Select";
 import Input from "./modal/Input";
 import { Game } from "@/lib/types";
 import { plataforms as options } from "@/lib/plataforms"

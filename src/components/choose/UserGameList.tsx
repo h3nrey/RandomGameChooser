@@ -10,7 +10,7 @@ export default function UserGameList({ games }: { games: Game[] }) {
         // setGames(games?.filter((g, index) => index != i))
     }
     return (
-        <ul className="flex">
+        <ul className="flex gap-2">
             {games && games.map((game, index) => (
                 <li
                     key={game.title}

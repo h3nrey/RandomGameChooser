@@ -10,14 +10,14 @@ export default function GameListCard({ cover, close }: GameListCardProps) {
     return (
         <div className="group relative z-0">
             <img
-                className="h-20"
+                className="h-32"
                 src={cover}
                 alt=""
             />
 
             <button
                 onClick={close}
-                className="hidden absolute group-hover:block top-0 right-0 px-1 text-white text__stroke z-10"
+                className="hidden text-3xl absolute group-hover:block top-0 right-0 px-2 text-white text__stroke z-10 font-title"
             >
                 x
             </button>
