@@ -20,7 +20,7 @@ export default function AddGameModal({ closeCallback, addGame }: Props) {
         plataforms: [],
         languages: [],
         rating: 0,
-        releaseDate: ""
+        releaseDate: 0
     })
 
     function handleInputChange(value: string | string[] | number, name: string) {
@@ -57,22 +57,29 @@ export default function AddGameModal({ closeCallback, addGame }: Props) {
                     changeCallback={handleInputChange}
                 />
 
-                <Select
-                    name="plataforms"
-                    changeCallback={handleInputChange}
-                >
-                    <>
-                        {options.map(option => (
-                            <option
-                                key={option.value}
-                                value={option.value}
-                            >
-                                {option.name}
-                            </option>
-                        ))}
-                    </>
+                <div className="flex flex-col">
+                    <label htmlFor="" className="text-[1.25rem]">
+                        Plataformas
+                    </label>
+                    <Select
+                        label="Plataforms"
+                        name="plataforms"
+                        changeCallback={handleInputChange}
+                    >
+                        <>
+                            {options.map(option => (
+                                <option
+                                    key={option}
+                                    value={option}
+                                >
+                                    {option}
+                                </option>
+                            ))}
+                        </>
 
-                </Select>
+                    </Select>
+                </div>
+
 
                 <div
                     className="flex gap-10"

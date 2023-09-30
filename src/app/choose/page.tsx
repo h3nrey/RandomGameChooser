@@ -1,12 +1,14 @@
 "use client"
 
+import { filterGames } from "@/Utils/Filter"
 import AddGameModal from "@/components/choose/AddGameModal"
 import ChooseHeader from "@/components/choose/ChooseHeader"
 import ChoosedGame from "@/components/choose/ChoosedGame/ChoosedGame"
 import Loader from "@/components/choose/ChoosedGame/Loader"
+import FilterContainer from "@/components/choose/Filter/FilterContainer"
 import { GamesCollectionContext } from "@/components/choose/GamesCollectionContext"
 import UserGameList from "@/components/choose/UserGameList"
-import { Game } from "@/lib/types"
+import { Filters, Game } from "@/lib/types"
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 
@@ -14,9 +16,13 @@ export default function Page() {
     const [games, setGames] = useState<Game[]>([])
 
     const [modalIsOpen, setModalIsOpen] = useState(false)
-    const [choosedGameIndex, setChoosedGameIndex] = useState<Game | null>(null)
+    const [choosedGameIndex, setChoosedGameIndex] = useState<Game | null | undefined>(null)
     const [choosing, setChoosing] = useState(false);
 
+    const [filtersSelected, setSelectedFilters] = useState<Filters | null>(null);
+
+
+    // Modal 
     function handleModalState(state: boolean) {
         if (modalIsOpen && !state) {
             setModalIsOpen(false)
@@ -25,28 +31,41 @@ export default function Page() {
         }
     }
 
-    function chooseRandomGame() {
-        setChoosing(true);
-        const randomIndex = Math.floor(Math.random() * games.length)
-        const game = games[randomIndex]
-        setChoosedGameIndex(game)
-        setTimeout(() => setChoosing(false), 1500)
+    // Choose 
+    function getFilters(selectedFilters: Filters) {
+        setSelectedFilters(selectedFilters)
     }
 
-    function addGame(game: Game) {
-        const gamesTemp = [...games, game]
-        window.localStorage.setItem("games", JSON.stringify(gamesTemp))
-        setGames(gamesTemp)
+    function chooseRandomGame() {
+        setChoosing(true);
+        const filteredGames = filterGames(games, filtersSelected)
+        setTimeout(() => setChoosing(false), 1500)
+        if (filterGames.length < 1) {
+            setChoosedGameIndex(undefined)
+            return
+        }
+
+
+        const randomIndex = Math.floor(Math.random() * filteredGames.length)
+        const game = filteredGames[randomIndex]
+        setChoosedGameIndex(game)
+    }
+
+    // Game List 
+    function updateGames(games: Game[]) {
+        window.localStorage.setItem("games", JSON.stringify(games))
+        setGames(games)
     }
 
     function removeGame(gameIndex: number) {
-        const gamesTemp = games.filter((_, index) => index != gameIndex)
-        window.localStorage.setItem("games", JSON.stringify(gamesTemp))
-        setGames(gamesTemp)
+        const filteredGames = games.filter((_, index) => index != gameIndex)
+        updateGames(filteredGames)
     }
 
+    // Retrieve data from local storage 
     useEffect(() => {
         const storedData = window.localStorage.getItem("games")
+
         if (storedData) {
             const parsedData = JSON.parse(storedData)
             setGames(parsedData)
@@ -54,49 +73,50 @@ export default function Page() {
     }, [])
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full pb-4">
             <GamesCollectionContext.Provider value={games}>
                 <ChooseHeader removeGame={removeGame} openModal={handleModalState} />
-            </GamesCollectionContext.Provider>
 
-            {/* {modalIsOpen && (
-                <AddGameModal
-                    closeCallback={handleModalState}
-                    addGame={addGame}
-                />
-            )} */}
 
-            {createPortal(
-                <>
-                    {modalIsOpen && (
-                        <AddGameModal
-                            closeCallback={handleModalState}
-                            addGame={addGame}
-                        />
-                    )}
-                </>,
-                document.body
-            )}
-
-            <div className="flex flex-col items-center">
-                {choosedGameIndex && (
-                    <div className="mb-8">
-                        {choosing ? (
-                            <Loader />
-                        ) : (
-                            <ChoosedGame choosedGame={choosedGameIndex} />
+                {/* {createPortal(
+                    <>
+                        {modalIsOpen && (
+                            <AddGameModal
+                                closeCallback={handleModalState}
+                                addGame={(game: Game) => updateGames([...games, game])}
+                            />
                         )}
-                    </div>
-                )}
+                    </>,
+                    document.body
+                )} */}
 
-                <button
-                    onClick={chooseRandomGame}
-                    className="bg-red-500 text-white text[1.75rem] py-4 px-4 rounded-sm w-fit outline outline-white outline-0 transition-all hover:outline-4 "
-                >
-                    Choose
-                </button>
-            </div>
+                <FilterContainer sendFilters={getFilters} />
 
+                <div className="flex flex-col items-center">
+                    {(choosedGameIndex !== null) && (
+                        <div className="mb-8">
+                            {choosing ? (
+                                <Loader />
+                            ) : (
+                                <>
+                                    {choosedGameIndex != undefined ? (
+                                        <ChoosedGame choosedGame={choosedGameIndex} />
+                                    ) : (
+                                        <p className="text-[1.75rem] text-white">Your list doesn&apos;t have a game with these filters :(</p>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    )}
+
+                    <button
+                        onClick={chooseRandomGame}
+                        className="bg-red-500 text-white text[1.75rem] py-4 px-4 rounded-sm w-fit outline outline-white outline-0 transition-all hover:outline-4 "
+                    >
+                        Choose
+                    </button>
+                </div>
+            </GamesCollectionContext.Provider>
         </div>
     )
 }

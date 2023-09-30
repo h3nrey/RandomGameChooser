@@ -5,5 +5,12 @@ export type Game =  {
     plataforms: string[],
     languages: string[],
     rating: number,
-    releaseDate: string
+    releaseDate: number
+}
+
+export type Filters = {
+    genres: string[],
+    plataforms: string[],
+    releaseDate: number | null,
+    rating: number | null
 }
